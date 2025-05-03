@@ -2,8 +2,7 @@
 import math
 import random
 import pygame
-
-# import astroids.data_classes.colors as colors
+import spaceshooter.data_classes.colors as colors
 # from astroids.data_classes.projectile_classes import LaserProjectile
 # import astroids.helpers.misc_helpers as mh
 # import astroids.helpers.physics_helper as ph
@@ -56,7 +55,7 @@ class GameParent:
         pygame.init()
       
         # Set up the game window    
-        self.screen = pygame.display.set_mode(self.screen_size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN, pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.set_caption(self.name)
 
         # font = pygame.font.Font('freesansbold.ttf', 16)
@@ -108,7 +107,7 @@ class GameParent:
         bg = self.get_background_image()
         if bg is None:
             # self.screen.fill(colors.WHITE)
-            self.screen.fill([255, 255, 255])
+            self.screen.fill(colors.BLACK)
         else:
             self.screen.blit(bg, (0, 0))
 
