@@ -2,7 +2,9 @@
 import math
 import random
 import pygame
+
 import spaceshooter.data_classes.colors as colors
+from spaceshooter.data_classes.ship_classes import get_default_ship
 
 class SpaceshooterGame:
     """Spaceshooter game class."""
@@ -11,7 +13,7 @@ class SpaceshooterGame:
             name: str = "Spaceshooter", 
             screen_height: int = 600,
             screen_width: int = 800,
-            background_filepath: str = "spaceshooter/Images/Blue Nebula 1 - 1024x1024.png",
+            background_filepath: str = "spaceshooter/Images/Backgrounds/Blue Nebula 1 - 1024x1024.png",
             fps: int = 30):
         """Initialize class."""
         self.name = name
@@ -65,11 +67,20 @@ class SpaceshooterGame:
         self.screen_width = self.screen.get_width()
         self.screen_height = self.screen.get_height()
 
+        # Create players
+        for ii in range(1, 3, 1):
+            ship = get_default_ship(ii)
+            ship.position.update(50, ii * self.screen_height // 3)
+            self.add_player(ship)
+
         self.isrunning = True
  
     def on_event(self, event):
         # Handle events
         if event.type == pygame.QUIT:
+            self.isrunning = False
+
+        if event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
             self.isrunning = False
         
     def on_loop(self):
@@ -100,48 +111,43 @@ class SpaceshooterGame:
         self.clock.tick()
         self.gametime += self.clock.get_time() /1000.0
         
-
+        # Draw status text
         font = pygame.font.Font('freesansbold.ttf', 32)
-        text = font.render(f"Score: {self.score}", True, self.text_color)
+
+        # Player 1
+        p = self.players.sprites()[0]
+        text = font.render(f"Score: {p.score}", True, self.text_color)
         textRect = text.get_rect()
         textRect.left = 0
         textRect.top = 0
-
         self.screen.blit(text, textRect)
 
-        font = pygame.font.Font('freesansbold.ttf', 32)
-        text3 = font.render(f"Score: {self.score}", True, self.text_color)
-        text3Rect = text.get_rect()
-        text3Rect.right = self.screen_width
-        text3Rect.top = 0
+        text = font.render(f"Lives: {p.lives}", True, self.text_color)
+        textRect = text.get_rect()
+        textRect.centerx = self.screen_width // 4
+        textRect.top = 0
+        self.screen.blit(text, textRect)
 
-        self.screen.blit(text3, text3Rect)
+        # Player 2
+        p = self.players.sprites()[1]
+        text = font.render(f"Score: {p.score}", True, self.text_color)
+        textRect = text.get_rect()
+        textRect.right = self.screen_width
+        textRect.top = 0
+        self.screen.blit(text, textRect)
+        
+        text = font.render(f"Lives: {p.lives}", True, self.text_color)
+        textRect = text.get_rect()
+        textRect.centerx = self.screen_width - self.screen_width // 4
+        textRect.top = 0
+        self.screen.blit(text, textRect)
 
-        text2 = font.render(f"Time: {int(self.gametime)}", True, self.text_color)
-        text2Rect = text2.get_rect()
-        text2Rect.centerx = self.screen_width // 2 
-        text2Rect.top = 0
-
-        self.screen.blit(text2, text2Rect)
-
-        text4 = font.render(f"Lives: {self.lives}", True, self.text_color)
-        text4Rect = text4.get_rect()
-        text4Rect.centerx = self.screen_width // 4
-        text4Rect.top = 0
-
-        self.screen.blit(text4, text4Rect)
-
-        text5 = font.render(f"Lives: {self.lives}", True, self.text_color)
-        text5Rect = text5.get_rect()
-        text5Rect.centerx = self.screen_width - self.screen_width // 4
-        text5Rect.top = 0
-
-        self.screen.blit(text5, text5Rect)
-
-
-        # player = self.players.sprites()[0]
-        # text = self.font.render(f"Score: {player.score:03d}, Energy: {int(player.energy):03d}, Health: {player.health:03d}", True, colors.WHITE)
-        # self.screen.blit(text, self.text_rect)
+        # Game time
+        text = font.render(f"Time: {int(self.gametime)}", True, self.text_color)
+        textRect = text.get_rect()
+        textRect.centerx = self.screen_width // 2 
+        textRect.top = 0
+        self.screen.blit(text, textRect)
 
         pygame.display.flip()
 
