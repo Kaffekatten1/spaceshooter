@@ -19,6 +19,9 @@ class SpaceshooterGame:
         self.screen_width = screen_width
         self.background_filepath = background_filepath
         self.fps = fps
+        self.score = 0
+        self.text_color = colors.WHITE
+        self.text_color_background = colors.BLACK
         
         self.background_image = None
         self.screen = None
@@ -26,6 +29,11 @@ class SpaceshooterGame:
 
         self.bg_x = 0
         self.bg_dx = 3
+
+        self.clock = pygame.time.Clock()
+        self.gametime = 0
+
+        self.lives = 3
 
         self.all_sprites = pygame.sprite.Group()
         self.players = pygame.sprite.Group()
@@ -53,6 +61,9 @@ class SpaceshooterGame:
         # Set up the game window    
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN, pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.set_caption(self.name)
+
+        self.screen_width = self.screen.get_width()
+        self.screen_height = self.screen.get_height()
 
         self.isrunning = True
  
@@ -85,6 +96,48 @@ class SpaceshooterGame:
 
         # Draw all sprites
         self.all_sprites.draw(self.screen)
+
+        self.clock.tick()
+        self.gametime += self.clock.get_time() /1000.0
+        
+
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render(f"Score: {self.score}", True, self.text_color)
+        textRect = text.get_rect()
+        textRect.left = 0
+        textRect.top = 0
+
+        self.screen.blit(text, textRect)
+
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text3 = font.render(f"Score: {self.score}", True, self.text_color)
+        text3Rect = text.get_rect()
+        text3Rect.right = self.screen_width
+        text3Rect.top = 0
+
+        self.screen.blit(text3, text3Rect)
+
+        text2 = font.render(f"Time: {int(self.gametime)}", True, self.text_color)
+        text2Rect = text2.get_rect()
+        text2Rect.centerx = self.screen_width // 2 
+        text2Rect.top = 0
+
+        self.screen.blit(text2, text2Rect)
+
+        text4 = font.render(f"Lives: {self.lives}", True, self.text_color)
+        text4Rect = text4.get_rect()
+        text4Rect.centerx = self.screen_width // 4
+        text4Rect.top = 0
+
+        self.screen.blit(text4, text4Rect)
+
+        text5 = font.render(f"Lives: {self.lives}", True, self.text_color)
+        text5Rect = text5.get_rect()
+        text5Rect.centerx = self.screen_width - self.screen_width // 4
+        text5Rect.top = 0
+
+        self.screen.blit(text5, text5Rect)
+
 
         # player = self.players.sprites()[0]
         # text = self.font.render(f"Score: {player.score:03d}, Energy: {int(player.energy):03d}, Health: {player.health:03d}", True, colors.WHITE)
