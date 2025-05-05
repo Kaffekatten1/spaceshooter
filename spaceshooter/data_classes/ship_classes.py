@@ -7,6 +7,7 @@ import pygame
 
 import spaceshooter.data_classes.colors as colors
 from spaceshooter.data_classes.parent_classes import PlayerParent
+import spaceshooter.data_classes.weapon_classes as weapons
 
 class Ship(PlayerParent):
     """Ship class."""
@@ -28,8 +29,8 @@ class Ship(PlayerParent):
         self.score = 0
 
         # Weapons
-        self.primary_weapon = None  #Laser(parent=self)
-        self.secondary_weapon = None  #HomingMissile(parent=self)
+        self.primary_weapon = weapons.Laser(parent=self)
+        self.secondary_weapon = weapons.HomingMissile(parent=self)
 
     def move_left(self):
         """Move ship left."""
@@ -60,11 +61,11 @@ class Ship(PlayerParent):
         if weapon is None:
             return
 
-        projectile, momentum, energy = weapon.fire()
-        if projectile is None:
+        plist, momentum, energy = weapon.fire()
+        if len(plist) == 0:
             return
 
-        self.parent.add_projectile(projectile)
+        self.parent.add_projectiles(plist)
 
         v1 = self.velocity
         n = Vector2(math.cos(self.angle), -math.sin(self.angle))
@@ -92,6 +93,12 @@ class Ship(PlayerParent):
         """Kill the sprite."""
         self.kill()
 
+    def cycle_level(self):
+        """CHEAT: Cycle weapon level."""
+        for w in [self.primary_weapon, self.secondary_weapon]:
+            level = w.level + 1
+            level = 1 if level > 5 else level
+            w.set_level(level)
 
 def get_default_ship(player:int = 1):
     """Generate a ship with default settings."""
@@ -101,7 +108,7 @@ def get_default_ship(player:int = 1):
         width = 35,
         radius = 35,
         mass = 1,
-        velocity_max = 300
+        velocity_max = 400
         )
 
     if player == 1:
@@ -119,8 +126,8 @@ def get_default_ship(player:int = 1):
             pygame.K_RIGHT: ship.move_right,
             pygame.K_UP: ship.move_up,
             pygame.K_DOWN: ship.move_down,
-            pygame.K_RETURN: ship.fire_primary,
-            pygame.K_RSHIFT: ship.fire_secondary,
+            pygame.K_KP_PLUS: ship.fire_primary,
+            pygame.K_KP_ENTER: ship.fire_secondary,
         }
 
     return ship

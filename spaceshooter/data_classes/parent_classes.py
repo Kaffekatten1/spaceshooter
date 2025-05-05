@@ -111,7 +111,9 @@ class WeaponParent(pygame.sprite.Sprite):
             energy_cost: int = 1, 
             projectile_mass: float = 1,
             projectile_initial_velocity: float = 1, 
-            projectile_final_velocity: float = 5):
+            projectile_final_velocity: float = 5,
+            level: int = 1,
+            nprojectiles: int = 1):
         """Initialize class."""
         super().__init__()
 
@@ -123,6 +125,8 @@ class WeaponParent(pygame.sprite.Sprite):
         self.projectile_mass = projectile_mass
         self.projectile_initial_velocity = projectile_initial_velocity
         self.projectile_final_velocity = projectile_final_velocity
+        self.level = level
+        self.nprojectiles = nprojectiles
 
         self.cooldown = 0
 

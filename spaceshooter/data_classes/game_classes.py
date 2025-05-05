@@ -80,8 +80,13 @@ class SpaceshooterGame:
         if event.type == pygame.QUIT:
             self.isrunning = False
 
-        if event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE:
-            self.isrunning = False
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_ESCAPE:
+                self.isrunning = False
+            elif event.key == pygame.K_o:
+                self.players.sprites()[0].cycle_level()
+            elif event.key == pygame.K_p:
+                self.players.sprites()[1].cycle_level()
         
     def on_loop(self):
         """Update game."""
@@ -92,6 +97,12 @@ class SpaceshooterGame:
 
         # Handle movement
         self.all_sprites.update()
+
+        # Kill sprites outside window
+        for s in self.all_sprites:
+            r = s.rect
+            if r.right < 0 or r.bottom < 0 or r.left > self.screen_width or r.top > self.screen_height:
+                s.kill()
 
 
     def on_render(self):
@@ -198,3 +209,8 @@ class SpaceshooterGame:
         """Add projectile to game."""
         self.all_sprites.add(projectile)
         self.projectiles.add(projectile)
+
+    def add_projectiles(self, plist):
+        """Add multiple projectiles to game."""
+        for p in plist:
+            self.add_projectile(p)
