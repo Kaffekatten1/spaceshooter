@@ -16,6 +16,8 @@ class Laser(WeaponParent):
             **kwargs
         )
 
+        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/laser.wav")
+
     @property
     def delta_time(self):
         """Return time delta."""
@@ -81,6 +83,8 @@ class Laser(WeaponParent):
             ))
 
             a += da
+        
+        pygame.mixer.Sound.play(self.sound)
 
         return plist, momentum, energy
 
@@ -96,6 +100,8 @@ class HomingMissile(WeaponParent):
             energy_cost=0,
             **kwargs
         )
+
+        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/missile.wav")
 
     @property
     def delta_time(self):
@@ -153,8 +159,8 @@ class HomingMissile(WeaponParent):
                 mass=self.projectile_mass,
                 lifetime=2 / self.delta_time,
                 health=1,
-                height=15,
-                width=15,
+                height=10,
+                width=25,
                 radius=15,
                 position=[px, py],
                 velocity=[vx, vy],
@@ -163,5 +169,7 @@ class HomingMissile(WeaponParent):
             ))
 
             a += da
+        
+        pygame.mixer.Sound.play(self.sound)
 
         return plist, momentum, energy

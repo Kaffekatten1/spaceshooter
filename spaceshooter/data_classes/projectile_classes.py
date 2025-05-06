@@ -90,7 +90,7 @@ class HomingMissileProjectile(ProjectileParent):
         """Initialize class."""
         super().__init__(self, **kwargs)
 
-        self.image0 = pygame.transform.scale(pygame.image.load("spaceshooter/Images/Projectiles/laser.png").convert(), (self.width, self.height))
+        self.image0 = pygame.transform.scale(pygame.image.load("spaceshooter/Images/Projectiles/missile.png").convert(), (self.width, self.height))
         self.image0.set_colorkey(colors.WHITE)
         self.rect = self.image0.get_rect()
 
