@@ -35,7 +35,7 @@ class SpaceshooterGame:
         self.clock = pygame.time.Clock()
         self.gametime = 0
 
-        self.lives = 3
+        self.sound_on = True
 
         self.all_sprites = pygame.sprite.Group()
         self.players = pygame.sprite.Group()
@@ -87,6 +87,8 @@ class SpaceshooterGame:
                 self.players.sprites()[0].cycle_level()
             elif event.key == pygame.K_p:
                 self.players.sprites()[1].cycle_level()
+            elif event.key == pygame.K_m:
+                self.sound_on = not self.sound_on
         
     def on_loop(self):
         """Update game."""

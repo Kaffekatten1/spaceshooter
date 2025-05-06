@@ -84,7 +84,8 @@ class Laser(WeaponParent):
 
             a += da
         
-        pygame.mixer.Sound.play(self.sound)
+        if self.parent.parent.sound_on:
+            pygame.mixer.Sound.play(self.sound)
 
         return plist, momentum, energy
 
@@ -170,6 +171,7 @@ class HomingMissile(WeaponParent):
 
             a += da
         
-        pygame.mixer.Sound.play(self.sound)
+        if self.parent.parent.sound_on:
+            pygame.mixer.Sound.play(self.sound)
 
         return plist, momentum, energy
