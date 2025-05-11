@@ -1,7 +1,6 @@
 """Definition for game classes."""
-import math
-import random
 import pygame
+import pygame_menu
 
 import spaceshooter.data_classes.colors as colors
 from spaceshooter.data_classes.ship_classes import get_default_ship
@@ -28,6 +27,9 @@ class SpaceshooterGame:
         self.background_image = None
         self.screen = None
         self.isrunning = False
+        self.isquitting = False
+
+        self.nplayers = 1
 
         self.bg_x = 0
         self.bg_dx = 3
@@ -78,7 +80,7 @@ class SpaceshooterGame:
     def on_event(self, event):
         # Handle events
         if event.type == pygame.QUIT:
-            self.isrunning = False
+            self.isquitting = True
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
@@ -105,7 +107,6 @@ class SpaceshooterGame:
             r = s.rect
             if r.right < 0 or r.bottom < 0 or r.left > self.screen_width or r.top > self.screen_height:
                 s.kill()
-
 
     def on_render(self):
         """Draw screen.""" 
@@ -173,9 +174,33 @@ class SpaceshooterGame:
         pygame.quit()
  
     def on_execute(self):
-        # Initialize game
+        # Show menu
+        menu = pygame_menu.Menu('Welcome', 400, 300,
+                       theme=pygame_menu.themes.THEME_BLUE)
+
+        menu.add.selector('Players :', [('One player', 1), ('Two players', 2)], onchange=self.set_nplayers)
+        menu.add.button('Play', self.on_start)
+        menu.add.button('Quit', pygame_menu.events.EXIT)
+
+        while not self.isquitting:
+            pygame.mixer.music.load("spaceshooter/Sounds/Music/spaceshooter_theme_1.wav")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)
+
+            menu.mainloop(self.screen)
+
+    def set_nplayers(self, value, nplayers):
+        self.nplayers = nplayers
+
+    def on_start(self):
+        # Run the game
         if self.on_init() == False:
             self.isrunning = False
+
+        pygame.mixer.music.fadeout(1000)
+
+        pygame.mixer.music.load("spaceshooter/Sounds/Music/spaceshooter_theme_4.wav")
+        pygame.mixer.music.play(-1)
  
         # Main loop
         clock = pygame.time.Clock()
@@ -193,7 +218,11 @@ class SpaceshooterGame:
             # Limit to fps
             clock.tick(self.fps)
 
-        self.on_cleanup()
+        pygame.mixer.music.fadeout(1000)
+
+        pygame.mixer.music.load("spaceshooter/Sounds/Music/spaceshooter_theme_1.wav")
+        pygame.mixer.music.play(-1)
+        # self.on_cleanup()
 
     def add_player(self, player):
         """Add player to game."""

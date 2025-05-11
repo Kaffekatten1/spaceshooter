@@ -16,7 +16,7 @@ class Laser(WeaponParent):
             **kwargs
         )
 
-        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/laser.wav")
+        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/click_distortion.wav")
 
     @property
     def delta_time(self):
