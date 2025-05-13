@@ -1,4 +1,5 @@
 """Definition for miscellaneous helper functions."""
+import sys
 import pygame
 
 def rot_center(image, angle, x, y):

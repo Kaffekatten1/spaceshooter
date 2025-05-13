@@ -90,6 +90,8 @@ class HomingMissileProjectile(ProjectileParent):
         """Initialize class."""
         super().__init__(self, **kwargs)
 
+        self.kill_sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/Boom!.wav")
+
         self.image0 = pygame.transform.scale(pygame.image.load("spaceshooter/Images/Projectiles/missile.png").convert(), (self.width, self.height))
         self.image0.set_colorkey(colors.WHITE)
         self.rect = self.image0.get_rect()
@@ -130,7 +132,7 @@ class HomingMissileProjectile(ProjectileParent):
 
         if self.target is not None:
             ut = (self.target.position - self.position).normalize()
-            self.angle = math.atan2(ut.x, -ut.y)
+            self.angle = a = math.atan2(-ut.y, ut.x)
             v += 100 * ut
 
         # Apply drag
@@ -168,7 +170,7 @@ class HomingMissileProjectile(ProjectileParent):
             if len(targets) > 0:
                 pos = self.position
                 self.target = min([t for t in targets], key=lambda t: pos.distance_to(t.position))
-                print(f"{self.name} acquired target: {self.target.name}")
+                # print(f"{self.name} acquired target: {self.target.name}")
             
         self.lifetime -= 1
         if self.lifetime <= 0:
@@ -178,3 +180,5 @@ class HomingMissileProjectile(ProjectileParent):
     def die(self):
         """Kill the sprite."""
         self.kill()
+        if self.parent.parent.parent.sound_on:
+            pygame.mixer.Sound.play(self.kill_sound)

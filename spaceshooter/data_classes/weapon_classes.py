@@ -16,7 +16,7 @@ class Laser(WeaponParent):
             **kwargs
         )
 
-        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/click_distortion.wav")
+        self.sound = pygame.mixer.Sound("spaceshooter/Sounds/Weapons/laser.wav")
 
     @property
     def delta_time(self):
@@ -146,7 +146,7 @@ class HomingMissile(WeaponParent):
         px0, py0 = ship.rect.center        
 
         da = math.pi * 135 / 180
-        a = ship.angle - self.nprojectiles // 2 * da
+        a = ship.angle - (self.nprojectiles - 1) / 2 * da
         for ii in range(self.nprojectiles):
             px = px0 + (ship.radius + 30) * math.cos(a)
             py = py0 - (ship.radius + 30) * math.sin(a)
@@ -158,7 +158,7 @@ class HomingMissile(WeaponParent):
                 parent=self,
                 name=f"Homing missile from {ship.name}",
                 mass=self.projectile_mass,
-                lifetime=2 / self.delta_time,
+                lifetime=2.5 / self.delta_time,
                 health=1,
                 height=10,
                 width=25,
